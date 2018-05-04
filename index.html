@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>纯 CSS 实现猫笑起来的动画</title>
+        <style type="text/css">
+            body {
+                background-color: #d69a44;
+            }
+            /* face */
+            .face {
+                position: absolute;
+                left: 50%;
+                margin-left: -175px;
+				top:40px;
+                width: 350px;
+                height: 250px;
+                border-radius: 50% 50% 30% 30%;
+                border: 2px solid #3f200b;
+                z-index: 10;
+                background: #fbf8f1;
+                overflow: hidden;
+            }
+            /* ear */
+           /*感觉没用所以把它注释掉了*/
+            /*.ear-wrap {
+                position: absolute;
+                width: 300px;
+                left: 50%;
+                margin-left: -150px;
+                   top: 100px; 
+            }*/
+            .ear-wrap{
+                position: absolute;
+                left: 50%;
+                width: 300px;
+                margin-left: -150px;
+                margin-top: 20px;
+            }
+            .ear {
+                position: absolute;
+                width: 80px;
+                height: 100px;
+                border: 2px solid #000;
+                background: #fbf8f1;
+                border-radius: 100% 10% 50% 0% ;
+                /* 下面的注释只是border-radius具体值而已*/
+               /*border-top-left-radius: 82px 102px;
+               border-bottom-left-radius: 0;
+               border-top-right-radius: 8.2px 10.2px;
+               border-bottom-right-radius: 41px 51px;*/
+            }
+            .ear-wrap .left{
+            	transition:transform 1s cubic-bezier(0.2,0.6,0.4,0.8);
+            }
+            
+            .ear-wrap .right {
+                left: auto;
+                right: 0;
+                border-radius: 10% 100% 0% 50%;
+                background: #f1ac2b;
+                
+                transition:transform 1s cubic-bezier(0.2,0.6,0.4,0.8)
+            }
+            /* 头发 */
+            .hair {
+                position: absolute;
+                width: 120px;
+                height: 120px;
+                left: 50%;
+                margin-left: 50px;
+                margin-top: -40px;
+                background: #f3b32e;
+                border-radius: 50% 50% 50% 50%;
+            }
+            /* 眼睛 */
+            .eye-wrap {
+                position: absolute;
+                width: 280px;
+                height: 70px;
+                top: 90px;
+                left: 50%;
+                margin-left: -140px;
+                overflow: hidden;
+            }
+            .eye {
+                height: 100px;
+                width: 100px;
+                position: absolute;
+            }
+            .eye-circle {
+                width: 100px;
+                height: 80px;
+                border: 2px solid #482507;
+                overflow: hidden;
+                position: absolute;
+                background: #fff;
+                border-radius: 50% 50% 40% 40%;
+                box-sizing: border-box;
+            }
+            .eye-core {
+                height: 55px;
+                width: 46px;
+                border-radius: 50% 50% 50% 50%;
+                /* margin: 0 auto; */
+                background: #000;
+                position: absolute;
+                left: 50%;
+                margin-left: -23px;
+                
+                transition:transform 1s cubic-bezier(0.2,0.6,0.4,0.8);
+                
+            }
+            .eye-bottom {
+                height: 50px;
+                width: 100px;
+                border-radius: 40% 40% 50% 50%;
+                position: absolute;
+                margin-top: 48px;
+                border-top: 2px solid #46240b;
+                background: #f6f7f2;
+                
+                transition:transform 1s cubic-bezier(0.2,0.6,0.4,0.8);
+            }
+            .eye-wrap .right {
+                left: auto;
+                right: 0px;
+            }
+            .face-red {
+                position: absolute;
+                height: 20px;
+                width: 70px;
+                background: red;
+                top: 45px;
+                /*top: 64px;*/
+                left: 18px;
+                border-radius: 50% 50% 50% 50%;
+                background: #e85a5e;
+                opacity: 0.0;
+                
+                transition:opacity 1s cubic-bezier(0.1,0.8,0.2,0.9);
+            }
+            /* 鼻子 */
+            .nose {
+                width: 20px;
+                height: 10px;
+                border-bottom: 8px solid #000;
+                border-radius: 0% 0% 50% 50%;
+                top: 154px;
+                left: 50%;
+                margin-left: -10px;
+                position: absolute;
+            }
+            /* 嘴巴 */
+            .mouth-wrap {
+                position: absolute;
+                top: 168px;
+                width: 80px;
+                left: 50%;
+                margin-left: -40px;
+                height: 20px;
+                overflow: hidden;
+            }
+            .mouth {
+                width: 40px;
+                height: 40px;
+                border-bottom: 4px solid #000;
+                border-right: 4px solid #000;
+                border-radius: 0% 40% 50% 20%;
+                margin-top: -26px;
+                position: absolute;
+                left: 0;
+            }
+            .mouth-wrap .left{
+            	transition:all 1s cubic-bezier(0.5,0.5,0.7,0.8);
+            }
+            .mouth-wrap .right {
+                transition:all 1s cubic-bezier(0.5,0.5,0.7,0.8);   
+                        	
+                border-bottom: 4px solid #000;
+                border-right: none;
+                border-left: 4px solid #000;
+                border-radius: 40% 0% 20% 50%;
+                position: absolute;
+                left: auto;
+                right: 0;
+            }
+            /*鼠标hover样式 写在这里*/  
+           .earRotateLeft{
+           	transform:matrix(0.86,-0.5,0.5,0.86,0,0);
+           }
+           .earRotateRight{
+           	transform:matrix(0.86,0.5,-0.5,0.86,0,0);
+           }
+           .eyeCoreReduce{
+           	transform:matrix(0.8,0,0,1,23,0);
+           }
+           .eyeBottomUp{
+           	transform:matrix(1,0,0,1,0,-10);
+           }
+           .faceTurnRed{
+           	opacity:0.75;
+           }
+           /*优先级不够上面的高，覆盖不了*/
+           /*.mouthLeftUp{
+           	border-bottom-left-radius: 22px 22px;
+           }
+           .mouth-wrap .right .mouthRightUp{
+           	border-bottom-right-radius: 22px 22px;
+           }*/
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- 脸 -->
+            <div class="face">
+                <!-- 头发 -->
+                <div class="hair">
+                    <div></div>
+                </div>
+                <!-- 眼睛 -->
+                <div class="eye-wrap">
+                    <div class="eye left">
+                        <div class="eye-circle">
+                            <div class="eye-core"></div>
+                        </div>
+                        <div class="eye-bottom"></div>
+                        <div class="face-red"></div>
+                    </div>
+                    <div class="eye right">
+                        <div class="eye-circle">
+                            <div class="eye-core"></div>
+                        </div>
+                        <div class="eye-bottom"></div>
+                        <div class="face-red"></div>
+                    </div>
+                </div>
+                <!-- 鼻子 -->
+                <div class="nose">
+                </div>
+                <!-- 嘴巴 -->
+                <div class="mouth-wrap">
+                    <!-- <div class="mouth-top"></div> -->
+                    <div class="mouth left mouthLeftUp"></div>
+                    <div class="mouth right "></div>
+                </div>
+            </div>
+            <!-- 耳朵 -->
+            <div class="ear-wrap">
+                <div class="ear left"> </div>
+                <div class="ear right "> </div>
+            </div>
+        </div>
+        
+        <script>
+        	(function (){
+        		
+        	function $(id){return document.querySelector(id)};
+        	
+        	function addHandler(element,type,handler){
+        		if(element.addEventListener){
+        			element.addEventListener(type,handler,false);
+        		}else if(element.attachEvent){
+        			element.attachEvent("on"+type,handler);
+        		}else{
+        			element["on"+type]=handler;
+        		}
+        	};
+        	
+        	function addClass(ele,classname){ele.classList.add(classname)};
+        	function removeClass(ele,classname){ele.classList.remove(classname)};
+        	
+        	addHandler($(".face"),"mouseover",function(){
+        		addClass($(".ear-wrap .left"),"earRotateLeft");
+        		addClass($(".ear-wrap .right"),"earRotateRight");
+        		addClass($(" .left .eye-core"),"eyeCoreReduce");
+        		addClass($(" .right .eye-core"),"eyeCoreReduce");
+        		addClass($(".left .eye-bottom"),"eyeBottomUp");
+        		addClass($(".right .eye-bottom"),"eyeBottomUp");
+        		addClass($(".left .face-red"),"faceTurnRed");
+        		addClass($(".right .face-red"),"faceTurnRed");
+        		
+        		// $(".mouth-wrap .left").classList.add("mouthLeftUp")
+        		//用classlist覆盖不了，原本css的优先级比设置的要高，所以直接用js设置style，行内优先级比两个class的高
+				$(".mouth-wrap .left").style.borderBottomLeftRadius="22px 22px";
+				$(".mouth-wrap .right").style.borderBottomRightRadius="22px 22px";
+				
+                /*只是为了省两个单词 = =*/
+//      		$(".ear-wrap .left").classList.add("earRotateLeft");
+//      		$(".ear-wrap .right").classList.add("earRotateRight");
+//      		$(" .left .eye-core").classList.add("eyeCoreReduce");
+//      		$(" .right .eye-core").classList.add("eyeCoreReduce");
+//      		$(".left .eye-bottom").classList.add("eyeBottomUp");
+//      		$(".right .eye-bottom").classList.add("eyeBottomUp");
+//      		$(".left .face-red").classList.add("faceTurnRed");
+//      		$(".right .face-red").classList.add("faceTurnRed");
+        	});
+        	
+        	
+        	addHandler($(".face"),"mouseout",function(){
+        		removeClass($(".ear-wrap .left"),"earRotateLeft");
+        		removeClass($(".ear-wrap .right"),"earRotateRight");
+        		removeClass($(" .left .eye-core"),"eyeCoreReduce");
+        		removeClass($(" .right .eye-core"),"eyeCoreReduce");
+        		removeClass($(".left .eye-bottom"),"eyeBottomUp");
+        		removeClass($(".right .eye-bottom"),"eyeBottomUp");
+        		removeClass($(".left .face-red"),"faceTurnRed");
+        		removeClass($(".right .face-red"),"faceTurnRed");
+        		$(".mouth-wrap .left").style.borderBottomLeftRadius="8.8px 8.8px";
+        		$(".mouth-wrap .right").style.borderBottomRightRadius="8.8px 8.8px";
+
+//              只是为了省几个单词而已
+//       		$(".ear-wrap").firstElementChild.classList.remove("earRotateLeft");
+//      		$(".ear-wrap").lastElementChild.classList.remove("earRotateRight");     
+//       		$(".left .eye-core").classList.remove("eyeCoreReduce");
+//      		$(".right .eye-core").classList.remove("eyeCoreReduce");  
+//      		$(".left .eye-bottom").classList.remove("eyeBottomUp");
+//      		$(".right .eye-bottom").classList.remove("eyeBottomUp");
+//      		$(".left .face-red").classList.remove("faceTurnRed");
+//      		$(".right .face-red").classList.remove("faceTurnRed");
+        	});
+        	})();
+        	
+        </script>
+    </body>
+</html>
